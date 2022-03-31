@@ -41,7 +41,7 @@ if ($procesaFormulario) {
 
     //inicializamos un array con tantos ceros como inputs
     for ($i = 0; $i < $selectedOption; $i++) {
-        $userAnswers[] = 0;
+        $userAnswers[] = "";
     }
 }
 
@@ -148,12 +148,6 @@ if ($procesaFormulario) {
         <input type="submit" value="Solución" name="hint">
         <input type="submit" value="Comenzar" name="refresh">
     <?php
-
-
-
-
-
-
 }
     ?>
     </form>
