@@ -87,12 +87,16 @@ $procesaBoton2 = false;
 $procesaBoton3 = false;
 $procesaBoton4 = false;
 $procesaBoton5 = false;
-$highlight = "";
-
+$color = "color"; 
+$media = "";
 
 if (isset($_POST['submit1'])) {
     $procesaBoton1 = true;
-    $highlight = "color";
+}
+
+if (isset($_POST['submit2'])) {
+    $procesaBoton2 = true;
+    $color = "color";
 }
 
 if (isset($_POST['refresh'])) {
@@ -114,7 +118,7 @@ if (isset($_POST['refresh'])) {
     <h1>Ejercicio 4</h1>
     <h2>Pulsa cualquier botón para ver la diferente información. </h2><br>
     <ol>
-        <li class="<?php echo $highlight ?>">Listados de alumnos con las notas de la primera y segunda evaluación, junto con su nota media. <button type="submit" name="submit1"> Mostrar</button></li><br>
+        <li>Listados de alumnos con las notas de la primera y segunda evaluación, junto con su nota media. <button type="submit" name="submit1"> Mostrar</button></li><br>
         <li>Asignatura con mayor número de aprobados. <button type="submit" name="submit2"> Mostrar</button></li><br>
         <li>Asignatura con mayor número de suspensos. <button type="submit" name="submit3"> Mostrar</button></li><br>
         <li>Número de aprobados en cada asignatura. <button type="submit" name="submit4"> Mostrar</button></li><br>
@@ -126,14 +130,19 @@ if (isset($_POST['refresh'])) {
     <!--Primer botón-->
     <?php
     if ($procesaBoton1) {
+        echo "<h2 style='color: green'>Listados de alumnos con las notas de la primera y segunda evaluación, junto con su nota media.</h2>";
         echo ("<table style=\"border: 1px solid black;\">");
-        echo ("<tr><th rowspan=2>Alumnos</th><th colspan=2>DWES</th><th colspan=2>DWEC</th><th colspan=2>DIW</th><th colspan=2>DAW</th><th colspan=2>HLC</th><th colspan=2>EIE</th></tr>");
-        echo ("<tr><th>1ª Eval.</th><th>2ª Eval.</th><th>1ª Eval.</th><th>2ª Eval.</th><th>1ª Eval.</th><th>2ª Eval.</th><th>1ª Eval.</th><th>2ª Eval.</th><th>1ª Eval.</th><th>2ª Eval.</th><th>1ª Eval.</th><th>2ª Eval.</th></tr>");
+        echo ("<tr><th rowspan=2>Alumnos</th><th colspan=3>DWES</th><th colspan=3>DWEC</th><th colspan=3>DIW</th><th colspan=3>DAW</th><th colspan=3>HLC</th><th colspan=3>EIE</th></tr>");
+        echo ("<tr>");
+        for ($i=1; $i < 7; $i++) { 
+            echo "<th>1ª Eval.</th><th>2ª Eval.</th><th style='background-color:grey'>Media</th>";
+        };
+        echo ("</tr>");    
         echo ("<tr>");
         foreach ($students as $array) {
 
             foreach ($array as $modulos => $value) {
-
+                $media = 0;
                 //Nombres alumnos
                 if ($modulos == "Nombre") {
                     echo "<td>$value</td>";
@@ -141,7 +150,9 @@ if (isset($_POST['refresh'])) {
                 }else {
                     foreach ($value as $notas) {
                         echo "<td>$notas</td>";
+                        $media = $media + $notas;
                     }
+                    echo "<td style='background-color:grey'>$media</td>";
                 }
             }
             echo ("</tr>");
