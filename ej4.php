@@ -150,8 +150,9 @@ if (isset($_POST['refresh'])) {
                 }else {
                     foreach ($value as $notas) {
                         echo "<td>$notas</td>";
-                        $media = $media + $notas;
+                        $media = ($media + $notas);
                     }
+                    $media = $media / 2;
                     echo "<td style='background-color:grey'>$media</td>";
                 }
             }
