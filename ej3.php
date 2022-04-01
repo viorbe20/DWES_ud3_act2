@@ -48,6 +48,7 @@ if ($procesaFormulario) {
     if (!isset($_POST['provinces'])) {
         $procesaFormulario = false;
         $errorMsg = "Selecciona al menos una provincia.";
+        $randomCA = $_POST['selectedComunidad'];
     } else {
         //Guardamos las provincias seleccionadas
         $selectedProvinces = $_POST['provinces'];
@@ -71,7 +72,9 @@ if (isset($_POST['submit2'])) {
     $procesaFormulario = true;
     $showSolution = true;
     $randomCA = $_POST['selectedComunidad'];
-    //echo $comunidadesArray[$randomCA];
+    $aciertos = $_POST['aciertos'];
+    $fallos = $_POST['fallos'];
+
 }
 
 
@@ -113,10 +116,12 @@ if (isset($_POST['submit2'])) {
 if ($procesaFormulario) {
 ?>
     <form action="" method="post">
-        <?php
-        echo "Aciertos: $aciertos" . '<br>';
-        echo "Fallos: $fallos";
-        ?>
+        <label>Aciertos</label>
+        <input type="text" name="aciertos" value=<?php echo $aciertos ?> style="width : 30px;" readonly>
+        <br><br>
+        <label>Fallos</label>
+        <input type="text" name="fallos" value=<?php echo $fallos ?> style="width : 30px;" readonly>
+    
         <br><br>
         <input type="submit" value="Mostrar solución" name="submit2">
         <!--Conservamos la comundiad autónoma ya que se mostrará en el siguiente submit-->
@@ -132,7 +137,7 @@ if ($showSolution) {
     <h3><?php echo $randomCA ?></h3>
 <?php
     foreach ($comunidadesArray[$randomCA] as $key => $value) {
-        echo $value . '<br>';
+        echo $value . ', ';
     }
 }
 ?>
