@@ -9,56 +9,77 @@ Virginia Ordoño Bernier
 -->
 <?php
 $students = array(
-    1 => array("Andrea Solís Tejada", 6, 7),
-    2 => array("Carlos Chávez Hernández", 8, 9),
-    3 => array("Daniel Ayala Cantador", 10, 6),
-    4 => array("Javier Cebrián Muñoz", 7, 8),
-    5 => array("Javier Cebrián Muñoz", 9, 10),
-    6 => array("Jesús Díaz Rivas", 6, 7),
-    7 => array("Rubén Ramírez Ribera", 8, 9),
-    8 => array("Virginia Ordoño Bernier", 10, 6),
-);
-
-$students2 = array(
     1 => array(
         "Nombre" => "Andrea Solís Tejada",
-        "eva1" => 6,
-        "eva2" => 7
+        "DWES" => array(6, 7),
+        "DWEC" => array(8, 9),
+        "DIW" => array(10, 6),
+        "DIAW" => array(7, 8),
+        "HLC" => array(9, 10),
+        "EIE" => array(6, 7),
     ),
     2 => array(
         "Nombre" => "Carlos Chávez Hernández",
-        "eva1" => 8,
-        "eva2" => 9
+        "DWES" => array(6, 7),
+        "DWEC" => array(8, 9),
+        "DIW" => array(10, 6),
+        "DIAW" => array(7, 8),
+        "HLC" => array(9, 10),
+        "EIE" => array(6, 7),
     ),
     3 => array(
         "Nombre" => "Daniel Ayala Cantador",
-        "eva1" => 10,
-        "eva2" => 6
+        "DWES" => array(8, 9),
+        "DWEC" => array(10, 6),
+        "DIW" => array(7, 8),
+        "DIAW" => array(9, 10),
+        "HLC" => array(6, 7),
+        "EIE" => array(8, 9),
     ),
     4 => array(
         "Nombre" => "David Pérez Ruiz",
-        "eva1" => 7,
-        "eva2" => 8
+        "DWES" => array(10, 6),
+        "DWEC" => array(7, 8),
+        "DIW" => array(9, 10),
+        "DIAW" => array(6, 7),
+        "HLC" => array(8, 9),
+        "EIE" => array(10, 6),
     ),
     5 => array(
         "Nombre" => "Javier Cebrián Muñoz",
-        "eva1" => 9,
-        "eva2" => 10
+        "DWES" => array(7, 8),
+        "DWEC" => array(8, 9),
+        "DIW" => array(10, 6),
+        "DIAW" => array(7, 8),
+        "HLC" => array(9, 10),
+        "EIE" => array(6, 7),
     ),
     6 => array(
         "Nombre" => "Jesús Díaz Rivas",
-        "eva1" => 6,
-        "eva2" => 7
+        "DWES" => array(6, 7),
+        "DWEC" => array(8, 9),
+        "DIW" => array(10, 6),
+        "DIAW" => array(7, 8),
+        "HLC" => array(9, 10),
+        "EIE" => array(6, 7),
     ),
     7 => array(
         "Nombre" => "Rubén Ramírez Ribera",
-        "eva1" => 8,
-        "eva2" => 9
+        "DWES" => array(8, 9),
+        "DWEC" => array(10, 6),
+        "DIW" => array(7, 8),
+        "DIAW" => array(9, 10),
+        "HLC" => array(6, 7),
+        "EIE" => array(8, 9),
     ),
     8 => array(
         "Nombre" => "Virginia Ordoño Bernier",
-        "eva1" => 10,
-        "eva2" => 6
+        "DWES" => array(10, 6),
+        "DWEC" => array(7, 8),
+        "DIW" => array(9, 10),
+        "DIAW" => array(6, 7),
+        "HLC" => array(8, 9),
+        "EIE" => array(10, 6),
     ),
 );
 $procesaBoton1 = false;
@@ -76,10 +97,10 @@ if (isset($_POST['submit1'])) {
 
 if (isset($_POST['refresh'])) {
     $procesaBoton1 = false;
-$procesaBoton2 = false;
-$procesaBoton3 = false;
-$procesaBoton4 = false;
-$procesaBoton5 = false;
+    $procesaBoton2 = false;
+    $procesaBoton3 = false;
+    $procesaBoton4 = false;
+    $procesaBoton5 = false;
 }
 
 
@@ -106,40 +127,53 @@ $procesaBoton5 = false;
     <?php
     if ($procesaBoton1) {
         echo ("<table style=\"border: 1px solid black;\">");
-        echo ("<tr><th colspan=1>Alumnos</th><th colspan=1>1ª Eval.</th><th colspan=1>2ª Eval.</th><tr>");
-        foreach ($students as $data) {
-            echo ("<tr>");
-            echo ("<td>$data[0]</td>");
- 
-            echo ("<td>$data[1]</td>");
-            echo ("<td>$data[2]</td>");
+        echo ("<tr><th rowspan=2>Alumnos</th><th colspan=2>DWES</th><th colspan=2>DWEC</th><th colspan=2>DIW</th><th colspan=2>DAW</th><th colspan=2>HLC</th><th colspan=2>EIE</th></tr>");
+        echo ("<tr><th>1ª Eval.</th><th>2ª Eval.</th><th>1ª Eval.</th><th>2ª Eval.</th><th>1ª Eval.</th><th>2ª Eval.</th><th>1ª Eval.</th><th>2ª Eval.</th><th>1ª Eval.</th><th>2ª Eval.</th><th>1ª Eval.</th><th>2ª Eval.</th></tr>");
+        echo ("<tr>");
+        foreach ($students as $array) {
+
+            foreach ($array as $modulos => $value) {
+
+                //Nombres alumnos
+                if ($modulos == "Nombre") {
+                    echo "<td>$value</td>";
+                    
+                }else {
+                    foreach ($value as $notas) {
+                        echo "<td>$notas</td>";
+                    }
+                }
+            }
             echo ("</tr>");
         }
+
         echo ("</table>");
     }
 
     ?>
 
 
-<style type="text/css">
-    table{
-        margin: 8px;
-    }
-    td {
-        border: 1px solid black;
-        text-align: center;
-        padding: 2px 6px;
+    <style type="text/css">
+        table {
+            margin: 8px;
         }
-    th {
-        border: 1px solid black;
-        text-align: center;
-        padding: 2px 6px;
+
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 2px 6px;
         }
-        .color{
+
+        th {
+            border: 1px solid black;
+            text-align: center;
+            padding: 2px 6px;
+        }
+
+        .color {
             color: purple;
             font-weight: bolder;
         }
-        
     </style>
 
 
