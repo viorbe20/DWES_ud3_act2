@@ -9,7 +9,6 @@ Virginia Ordoño Bernier
 -->
 
 <?php
-$procesaFormulario = false;
 $comunidadesArray = array(
     'Andalucía' => array("Almería", "Cádiz", "Córdoba", "Granada", "Huelva", "Jaén", "Málaga", "Sevilla"),
     'Aragón' => array("Zaragoza", "Huesca", "Teruel"),
@@ -30,11 +29,14 @@ $comunidadesArray = array(
     "Ceuta" => array("Ceuta"),
     "Melilla" => array("Melilla")
 );
-$randomCA = array_rand($comunidadesArray);
-$selectedProvinces = array();
+$procesaFormulario = false;
+$showSolution = false;
 $aciertos = "";
 $fallos = "";
 $errorMsg = '';
+$randomCA = array_rand($comunidadesArray);
+$selectedProvinces = array();
+
 
 if (isset($_POST['submit'])) {
     $procesaFormulario = true;
@@ -50,15 +52,12 @@ if ($procesaFormulario) {
         //Guardamos las provincias seleccionadas
         $selectedProvinces = $_POST['provinces'];
         $randomCA = $_POST['selectedComunidad'];
-        //var_dump($comunidadesArray[$randomCA]);
-        
 
-        //Buscamos fallos y aciertos
+        //Calculamos fallos y aciertos
         $aciertos = 0;
         $fallos = 0;
-        
+
         foreach ($selectedProvinces as $province) {
-            //echo in_array($province, $comunidadesArray[$randomCA]);
             if (in_array($province, $comunidadesArray[$randomCA]) == 1) {
                 $aciertos = $aciertos + 1;
             } else {
@@ -70,17 +69,19 @@ if ($procesaFormulario) {
 
 if (isset($_POST['submit2'])) {
     $procesaFormulario = true;
-    
+    $showSolution = true;
+    $randomCA = $_POST['selectedComunidad'];
+    //echo $comunidadesArray[$randomCA];
 }
 
 
 ?>
-
+<!--Primer formulario-->
 <form action="" method="post">
     <h1>Ejercicio 3</h1>
     <h2>Selecciona las provincias que pertenecen a la comunidad mostrada.</h2>
 
-    <div class="CA"><?php echo $randomCA ?> </div>
+    <h3><?php echo $randomCA ?> </h3>
     <input type="hidden" name="selectedComunidad" value=<?php echo $randomCA ?>>
 
     <?php
@@ -107,7 +108,7 @@ if (isset($_POST['submit2'])) {
     </style>
 </form>
 
-<!--Se muestra tras comprobar-->
+<!--Tras submit, muestra aciertos y fallos-->
 <?php
 if ($procesaFormulario) {
 ?>
@@ -116,9 +117,27 @@ if ($procesaFormulario) {
         echo "Aciertos: $aciertos" . '<br>';
         echo "Fallos: $fallos";
         ?>
-            <br><br>
-    <input type="submit" value="Mostrar solución" name="submit2">
+        <br><br>
+        <input type="submit" value="Mostrar solución" name="submit2">
+        <!--Conservamos la comundiad autónoma ya que se mostrará en el siguiente submit-->
+        <input type="hidden" name="selectedComunidad" value=<?php echo $randomCA ?>>
     </form>
 <?php
 }
+
+//Muestra solución
+if ($showSolution) {
 ?>
+
+    <h3><?php echo $randomCA ?></h3>
+<?php
+    foreach ($comunidadesArray[$randomCA] as $key => $value) {
+        echo $value . '<br>';
+    }
+}
+?>
+<style>
+    h3{
+        color: blue;
+    }
+</style>
