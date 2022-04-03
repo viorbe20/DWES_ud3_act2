@@ -152,6 +152,24 @@ function cargaAprobados($marksArray, $moduleName)
     return $aprobadosArray;
 }
 
+/**
+ * Dados un array con notas y el nombre del módulo, 
+ * devuelve un array con los suspensos
+ */
+function cargaSuspensos($marksArray, $moduleName)
+{
+    $suspensosArray = array();
+
+    foreach ($marksArray[$moduleName] as $value) {
+        for ($i = 0; $i < count($value); $i++) {
+            if ($value[$i] < 5) {
+                $suspensosArray[] = $value[$i];
+            }
+        }
+    }
+    return $suspensosArray;
+}
+
 
 
 if (isset($_POST['submit1'])) {
@@ -226,6 +244,74 @@ if (isset($_POST['submit2'])) {
     }
 }
 
+//Muestra la asignatura con más aprobados
+if (isset($_POST['submit3'])) {
+    $procesaBoton3 = true;
+
+    //Cargamos arrays con aprobados y contamos
+    $dwesNotas = count(cargaSuspensos($modules, "DWES"));
+    $dwecNotas = count(cargaSuspensos($modules, "DWEC"));
+    $diwNotas = count(cargaSuspensos($modules, "DIW"));
+    $dawNotas = count(cargaSuspensos($modules, "DAW"));
+    $hlcNotas = count(cargaSuspensos($modules, "HLC"));
+    $eieNotas = count(cargaSuspensos($modules, "EIE"));
+
+    //Comparamos números de aprobados
+    //Carga nombres de los módulos con más aprobados
+    if ($dwesNotas > $highestMark) {
+        //Actualizamos número y array y añadimos el nombre del módulo
+        $highestMark = $dwesNotas;
+        $highestMarksArray = array();
+        $highestMarksArray[] = "DWES";
+    } else if ($dwesNotas == $highestMark) {
+        $highestMarksArray[] = "DWES";
+    }
+
+    if ($dwecNotas > $highestMark) {
+        //Actualizamos número y array y añadimos el nombre del módulo
+        $highestMark = $dwecNotas;
+        $highestMarksArray = array();
+        $highestMarksArray[] = "DWEC";
+    } else if ($dwecNotas == $highestMark) {
+        $highestMarksArray[] = "DWEC";
+    }
+
+    if ($diwNotas > $highestMark) {
+        //Actualizamos número y array y añadimos el nombre del módulo
+        $highestMark = $diwNotas;
+        $highestMarksArray = array();
+        $highestMarksArray[] = "DIW";
+    } else if ($diwNotas == $highestMark) {
+        $highestMarksArray[] = "DIW";
+    }
+
+    if ($dawNotas > $highestMark) {
+        //Actualizamos número y array y añadimos el nombre del módulo
+        $highestMark = $dawNotas;
+        $highestMarksArray = array();
+        $highestMarksArray[] = "DAW";
+    } else if ($dawNotas == $highestMark) {
+        $highestMarksArray[] = "DAW";
+    }
+
+    if ($hlcNotas > $highestMark) {
+        //Actualizamos número y array y añadimos el nombre del módulo
+        $highestMark = $hlcNotas;
+        $highestMarksArray = array();
+        $highestMarksArray[] = "HLC";
+    } else if ($hlcNotas == $highestMark) {
+        $highestMarksArray[] = "HLC";
+    }
+    if ($eieNotas > $highestMark) {
+        //Actualizamos número y array y añadimos el nombre del módulo
+        $highestMark = $eieNotas;
+        $highestMarksArray = array();
+        $highestMarksArray[] = "EIE";
+    } else if ($eieNotas == $highestMark) {
+        $highestMarksArray[] = "EIE";
+    }
+}
+//Recarga la página
 if (isset($_POST['refresh'])) {
     $procesaBoton1 = false;
     $procesaBoton2 = false;
@@ -306,18 +392,32 @@ if (isset($_POST['refresh'])) {
             font-weight: bolder;
         }
     </style>
-    <!--Segundo botón-->
-    <?php 
+</form>
+
+<!--Segundo botón-->
+<form action="" method="post">
+    <?php
     if ($procesaBoton2) {
-    
+
         echo "El número mayor de aprobados es " . $highestMark;
         echo "<br><br>";
         echo "Módulo/s: ";
         foreach ($highestMarksArray as $key) {
             echo $key . ", ";
         }
-    
-    }?>
-   
+    } ?>
+</form>
 
+<!--Tercer botón-->
+<form action="" method="post">
+    <?php
+    if ($procesaBoton3) {
+
+        echo "El número mayor de suspensos es " . $highestMark;
+        echo "<br><br>";
+        echo "Módulo/s: ";
+        foreach ($highestMarksArray as $key) {
+            echo $key . ", ";
+        }
+    } ?>
 </form>
