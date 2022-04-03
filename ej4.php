@@ -8,6 +8,7 @@ Generación de boletines de notas en función de la evaluación seleccionada en 
 Virginia Ordoño Bernier
 -->
 <?php
+//array que contiene los alumnos y sus notas
 $modules = array(
     "DWES" => array(
         "Andrea Solís Tejada" => array(5, 7),
@@ -41,8 +42,6 @@ $modules = array(
     ),
 );
 
-foreach ($modules as $key => $value) {
-}
 $students = array(
     1 => array(
         "Nombre" => "Andrea Solís Tejada",
@@ -117,11 +116,13 @@ $students = array(
         "EIE" => array(6, 6),
     ),
 );
+
 $procesaBoton1 = false;
 $procesaBoton2 = false;
 $procesaBoton3 = false;
 $procesaBoton4 = false;
 $procesaBoton5 = false;
+$boletinNotas = false;
 $media = "";
 $dwesNotas = array();
 $dwecNotas = array();
@@ -133,6 +134,10 @@ $eieNotas = array();
 $highestMarksArray = array();
 //Carga el número de aprobados máximo
 $highestMark = 0;
+//Carga la selección de la lista desplegable
+$selectedOption = "";
+//Guarda la evaluación que queremos mostrar
+$index = "";
 
 
 /**
@@ -323,6 +328,19 @@ if (isset($_POST['submit4'])) {
     $hlcNotas = count(cargaAprobados($modules, "HLC"));
     $eieNotas = count(cargaAprobados($modules, "EIE"));
 }
+
+//Muestra boletín de notas según evaluación seleccionada
+if (isset($_POST['submit5'])) {
+    $procesaBoton5 = true;
+}
+
+//Genera boletín de notas
+if (isset($_POST['generate'])) {
+    $procesaBoton5 = true;
+    $boletinNotas = true;
+    $selectedOption = $_POST['selectedOption'];
+}
+
 //Recarga la página
 if (isset($_POST['refresh'])) {
     $procesaBoton1 = false;
@@ -346,64 +364,74 @@ if (isset($_POST['refresh'])) {
     </ol>
     <button type="submit" name="refresh"> Limpiar</button>
     <br><br>
+</form>
 
-    <!--Primer botón-->
-    <?php
-    if ($procesaBoton1) {
-        echo "<h2 style='color: green'>Listados de alumnos con las notas de la primera y segunda evaluación, junto con su nota media.</h2>";
-        echo ("<table style=\"border: 1px solid black;\">");
-        echo ("<tr><th rowspan=2>Alumnos</th><th colspan=3>DWES</th><th colspan=3>DWEC</th><th colspan=3>DIW</th><th colspan=3>DAW</th><th colspan=3>HLC</th><th colspan=3>EIE</th></tr>");
-        echo ("<tr>");
-        for ($i = 1; $i < 7; $i++) {
-            echo "<th>1ª Eval.</th><th>2ª Eval.</th><th style='background-color:grey'>Media</th>";
-        };
-        echo ("</tr>");
-        echo ("<tr>");
-        foreach ($students as $array) {
-
-            foreach ($array as $modulos => $value) {
-                $media = 0;
-                //Nombres alumnos
-                if ($modulos == "Nombre") {
-                    echo "<td>$value</td>";
-                } else {
-                    foreach ($value as $notas) {
-                        echo "<td>$notas</td>";
-                        $media = ($media + $notas);
-                    }
-                    $media = $media / 2;
-                    echo "<td style='background-color:grey'>$media</td>";
-                }
-            }
-            echo ("</tr>");
-        }
-
-        echo ("</table>");
+<!--Primer botón-->
+<style type="text/css">
+    table {
+        margin: 8px;
     }
 
+    td {
+        border: 1px solid black;
+        text-align: center;
+        padding: 2px 6px;
+    }
+
+    th {
+        border: 1px solid black;
+        text-align: center;
+        padding: 2px 6px;
+    }
+
+    .color {
+        color: purple;
+        font-weight: bolder;
+    }
+</style>
+<form>
+    <?php
+    if ($procesaBoton1) {
     ?>
-    <style type="text/css">
-        table {
-            margin: 8px;
-        }
 
-        td {
-            border: 1px solid black;
-            text-align: center;
-            padding: 2px 6px;
-        }
+        <table style="border: 1px solid black">
+            <tr>
+                <th rowspan=2>Alumnos</th>
+                <th colspan=3>DWES</th>
+                <th colspan=3>DWEC</th>
+                <th colspan=3>DIW</th>
+                <th colspan=3>DAW</th>
+                <th colspan=3>HLC</th>
+                <th colspan=3>EIE</th>
+            </tr>
+            <tr>
+            <?php
+            for ($i = 1; $i < 7; $i++) {
+                echo "<th>1ª Eval.</th><th>2ª Eval.</th><th style='background-color:grey'>Media</th>";
+            };
+            echo ("</tr>");
+            echo ("<tr>");
+            foreach ($students as $array) {
 
-        th {
-            border: 1px solid black;
-            text-align: center;
-            padding: 2px 6px;
-        }
+                foreach ($array as $modulos => $value) {
+                    $media = 0;
+                    //Nombres alumnos
+                    if ($modulos == "Nombre") {
+                        echo "<td>$value</td>";
+                    } else {
+                        foreach ($value as $notas) {
+                            echo "<td>$notas</td>";
+                            $media = ($media + $notas);
+                        }
+                        $media = $media / 2;
+                        echo "<td style='background-color:grey'>$media</td>";
+                    }
+                }
+                echo ("</tr>");
+            }
 
-        .color {
-            color: purple;
-            font-weight: bolder;
-        }
-    </style>
+            echo ("</table>");
+        } ?>
 </form>
 
 <!--Segundo botón-->
@@ -449,3 +477,79 @@ if (isset($_POST['refresh'])) {
         echo "EIE: " . $eieNotas . "<br>";
     } ?>
 </form>
+
+<!--Quinto botón-->
+<form action="" method="post">
+    <?php
+    if ($procesaBoton5) {
+
+        //Mantenemos la selección de la lista después del submit
+        $option1 = "";
+        $option2 = "";
+
+        if ($boletinNotas) {
+            if ($selectedOption == "1ª Evaluación") {
+                $option1 = "selected";
+            } else if ($selectedOption == "2ª Evaluación") {
+                $option2 = "selected";
+            }
+        }        
+    ?>
+        <label>Elija una opción para generar un boletín de notas.</label>
+        <select name="selectedOption">
+            <option <?php echo $option1 ?>> 1ª Evaluación</option>";
+            <option <?php echo $option2 ?>> 2ª Evaluación </option>";
+        </select>
+        <br><br>
+        <button type="submit" name="generate">Generar Boletín</button>
+        <br><br>
+    <?php
+    } ?>
+</form>
+
+<?php
+if ($boletinNotas) {
+?>
+    <form action="" method="post">
+        <table style="border: 1px solid black">
+        <tr><th colspan=7 style=background-color:lightblue>Notas <?php echo $selectedOption?></th></tr>
+            <tr>
+                <th rowspan=2>Alumnos</th>
+                <th colspan=1>DWES</th>
+                <th colspan=1>DWEC</th>
+                <th colspan=1>DIW</th>
+                <th colspan=1>DAW</th>
+                <th colspan=1>HLC</th>
+                <th colspan=1>EIE</th>
+            </tr>
+            <tr>
+                <?php
+                echo ("</tr>");
+                echo ("<tr>");
+                //Seleccionamos las notas a mostrar según la evaluación
+                if ($selectedOption == "1ª Evaluación") {
+                    $index = 0;
+                } else if ($selectedOption == "2ª Evaluación") {
+                    $index = 1;
+                }
+                foreach ($students as $array) {
+
+                    foreach ($array as $modulos => $value) {
+                        $media = 0;
+                        //Nombres alumnos
+                        if ($modulos == "Nombre") {
+                            echo "<td>$value</td>";
+                        } else {
+                            echo "<td>$value[$index]</td>";
+                        }
+                    }
+                    echo ("</tr>");
+                }
+        
+                echo ("</table>");
+?>
+</form>   
+<?php
+
+}
+?>
