@@ -17,7 +17,13 @@ $countries = array(
     "Portugal" => "Lisboa",
     "Francia" => "París",
     "Italia" => "Roma",
-    "Alemania" => "Berlín"
+    "Alemania" => "Berlín",
+    "Bélgica" => "Bruselas",
+    "China" => "Pekín",
+    "Dinamarca" => "Copenhague",
+    "Grecia" => "Atenas",
+    "Irlanda" => "Dublín",
+
 );
 $selectedCountries = "";
 //Array que recoge las capitales introducidas por el usuario
@@ -27,6 +33,8 @@ $spanMssg = "";
 $type = "hidden";
 $showCoincidences = false; //Muestra los aciertos
 $class = "";
+$aciertos = "";
+$fallos = "";
 
 //Pulsa botón mostrar
 if (isset($_POST['submit'])) {
@@ -39,7 +47,7 @@ if ($procesaFormulario) {
     //Creamos un nuevo array con los países seleccionados
     $selectedCountries = array_slice($countries, 0, $selectedOption);
 
-    //inicializamos un array con tantos ceros como inputs
+    //inicializamos un array vacío
     for ($i = 0; $i < $selectedOption; $i++) {
         $userAnswers[] = "";
     }
@@ -49,7 +57,6 @@ if ($procesaFormulario) {
 if (isset($_POST['check'])) {
     $procesaFormulario = true;
     $procesaCapitales = true;
-    $showCoincidences = true;
 }
 
 if ($procesaCapitales) {
@@ -106,15 +113,18 @@ if ($procesaFormulario) {
 
         //Imprimimos tantos inputs como se haya indicado en la lista
         $n = 0;
+        $aciertos = 0;
+        $fallos = 0;
         foreach ($selectedCountries as $pais => $capital) {
-            //echo "La capital de la posición <b>$n</b> del país <b>$pais </b> es <b>$capital</b><br />";
             echo "<input type='text' name='pais' value= " . $pais . " readonly>";
             echo " <input type='text' name='capital[]' value= " . $userAnswers[$n] . ">";
             //Comprueba si las respuestas son correctas para darle color
             if ($capital == $userAnswers[$n]) {
                 $class = "right";
+                $aciertos = $aciertos + 1; 
             } else {
                 $class = "wrong";
+                $fallos = $fallos + 1; 
             };
             $n++;
 
@@ -144,9 +154,18 @@ if ($procesaFormulario) {
         ?>
         <!--Guardamos número de países a mostrar para la comprobación en el siguiente submit--->
         <input type="hidden" value=<?php echo $selectedOption ?> name="hiddenNumber">
-        <input type="submit" value="Comprobar" name="check">
-        <input type="submit" value="Solución" name="hint">
-        <input type="submit" value="Comenzar" name="refresh">
+        <button type="submit" name="hint">Solución</button>
+        <button type="submit" name="check">Aciertos y fallos</button>
+        <br><br>
+        <?php
+        if (isset($_POST['check']) || isset($_POST['hint'])) {
+            echo "<span>Aciertos: $aciertos </span><br>";
+            echo "<span>Fallos: $fallos </span>";
+        }
+        ?>
+
+        <br><br>
+        <button type="submit" name="refresh">Comenzar</button>
     <?php
 }
     ?>
