@@ -10,9 +10,9 @@ Virginia Ordoño Bernier
 <?php
 $modules = array(
     "DWES" => array(
-        "Andrea Solís Tejada" => array(0, 0),
-        "Carlos Chávez Hernández"  => array(0, 0),
-        "Daniel Ayala Cantador" => array(0, 0)
+        "Andrea Solís Tejada" => array(5, 7),
+        "Carlos Chávez Hernández"  => array(4, 4),
+        "Daniel Ayala Cantador" => array(3, 7)
     ),
     "DWEC" => array(
         "Andrea Solís Tejada" => array(2, 6),
@@ -170,8 +170,7 @@ function cargaSuspensos($marksArray, $moduleName)
     return $suspensosArray;
 }
 
-
-
+//Muestra listado alumnos con notas
 if (isset($_POST['submit1'])) {
     $procesaBoton1 = true;
 }
@@ -311,6 +310,19 @@ if (isset($_POST['submit3'])) {
         $highestMarksArray[] = "EIE";
     }
 }
+
+//Muestra número de aprobados de cada asignatura
+if (isset($_POST['submit4'])) {
+    $procesaBoton4 = true;
+
+    //Cargamos arrays con aprobados y contamos
+    $dwesNotas = count(cargaAprobados($modules, "DWES"));
+    $dwecNotas = count(cargaAprobados($modules, "DWEC"));
+    $diwNotas = count(cargaAprobados($modules, "DIW"));
+    $dawNotas = count(cargaAprobados($modules, "DAW"));
+    $hlcNotas = count(cargaAprobados($modules, "HLC"));
+    $eieNotas = count(cargaAprobados($modules, "EIE"));
+}
 //Recarga la página
 if (isset($_POST['refresh'])) {
     $procesaBoton1 = false;
@@ -419,5 +431,21 @@ if (isset($_POST['refresh'])) {
         foreach ($highestMarksArray as $key) {
             echo $key . ", ";
         }
+    } ?>
+</form>
+
+<!--Cuarto botón-->
+<form action="" method="post">
+    <?php
+    if ($procesaBoton4) {
+
+        echo "Números de aprobados de cada asignatura:";
+        echo "<br><br>";
+        echo "DWES: " . $dwesNotas . "<br>";
+        echo "DWEC: " . $dwecNotas . "<br>";
+        echo "DIW: " . $diwNotas . "<br>";
+        echo "DAW: " . $dawNotas . "<br>";
+        echo "HLC: " . $hlcNotas . "<br>";
+        echo "EIE: " . $eieNotas . "<br>";
     } ?>
 </form>
