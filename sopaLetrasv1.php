@@ -11,15 +11,16 @@ $text = 0;
 $direction = array("+", "-", "=");
 $rowDirection = "";
 $columnDirection = "";
-//Variable que contiene la forma de recorrer el array
-$loopRow = "";
-$loopColumn = "";
+
 $n = 1;
 
 //Array de palabras
-$wordsArray = array("MADRID", "LONDRES", "ROMA");
+$wordsArray = array("MADRID", "LONDRES", "ROMA", "DUBLÍN", "PARÍS");
+//Array que rellenaremos con los datos de cada palabra una vez colocadas y que usaremos para una comprobación final
+$capitalsArray = array();
+//array_push($capitalsArray, array("Nombre"=>"MADRID"));
+
 //Contiene la palabra que se vaya a colocar en ese momento. Cada letra ocupa una posición del array
-$word = "";
 $currentWord = array();
 $wordLength = "";
 
@@ -33,17 +34,11 @@ $firstLC = "";
 $lastLR = "";
 $lastLC = "";
 
-//Extrae la palabra del array y la separa en letras dentro de un array
-$word = $wordsArray[0];
-$currentWord = str_split($word);
-$wordLength = count($currentWord);
-//var_dump($currentWord);
-
 //Array con 
 for ($i = 0; $i <= LENGTHBOARD; $i++) {
     echo "<br>";
     for ($j = 0; $j <= LENGTHBOARD; $j++) {
-$text = "|".$i.$j."|";
+        $text = $i . $j . " ";
         echo $boardArray[$i][$j] = $text;
     }
 }
@@ -52,111 +47,117 @@ $boardArray[0][0] = "*";
 
 $validNumber = "true";
 do {
-    //Creamos fila y columna inicial y dirección
-    $firstLR = rand(0, 9);
-    $firstLC = rand(0, 9);
 
+    //Seleccionamos una capital y colocamos en la sopa. 
+    //Repetimos el mismo proceso con todas hasta que están todas colocadas.
+    foreach ($wordsArray as $key) {
+        echo ('<br><br>Capital seleccionada=> ' . $key);
 
-    //Contiene la primera letra con columna y fila
-    $firstLetter[$firstLR][$firstLC] = "M"; //$currentWord[0];
+        //Colocamos el nombre de la capital en el array final de verificación
+        array_push($capitalsArray, array("Nombre" => $key));
 
-    // echo "<br>Primera línea=>" . $firstLR;
-    // echo "<br>Primera columna=>" . $firstLC;
-    //echo "<br>Dirección línea=>" . $rowDirection;
+        //Creamos fila y columna inicial para la primera letra de palabra actual
+        $firstLR = rand(0, 9);
+        $firstLC = rand(0, 9);
+        echo '<br>' . $key . " inicia en " . $firstLR . $firstLC;
 
-    //Según la dirección de la línea, calculamos la posición de la línea de la última letra.
-    //Controlamos que no se salga del tablero generando números hasta que cuadre
-    //Cargamos también la $i++ del recorrido posterior para saber si tenemos que sumar 1, -1 o 0
-    do {
-        $rowDirection = $direction[rand(0, 2)];
-        //echo "<br>directionR" . $rowDirection;
-        switch ($rowDirection) {
-            case '+':
-                $lastLR = $firstLR + ($wordLength - 1);
-                $loopRow = "+1"; 
-                break;
-            case '-':
-                $lastLR = $firstLR - ($wordLength - 1);
-                $loopRow = "-1"; 
-                break;
-            case '=':
-                $lastLR = $firstLR;
-                $loopRow = "+0"; 
-                break;
-        }
-        //echo "<br>lastLR" . $lastLR;
-    } while ($lastLR > LENGTHBOARD || $lastLR < 0);
+        //Cargamos en una variable la longitud de la palabra
+        //Extrae la palabra del array y la separa en letras dentro de un array
+        $currentWord = str_split($key);
+        $wordLength = count($currentWord);
+        echo '<br>Longitud de ' . $key . " => " . $wordLength;
 
-    //Según la dirección de la columna, calculamos la posición de columna de la última letra
-    //Controlamos que no se salga del tablero generando números hasta que cuadre
-    //Cargamos también la $i++ del recorrido posterior para saber si tenemos que sumar 1, -1 o 0
-    do {
+        //Según la dirección de la línea, calculamos la posición de la línea de la última letra.
+        //Controlamos que no se salga del tablero generando números hasta que cuadre
+        //Cargamos también la $i++ del recorrido posterior para saber si tenemos que sumar 1, -1 o 0
 
-        //Verificamos que al menos una coordenada se desplaza
         do {
-            $columnDirection = $direction[rand(0, 2)];
-        } while ($columnDirection == "=" && $rowDirection == "=");
+            $rowDirection = $direction[rand(0, 2)];
+            echo "<br>Direction  de la fila => " . $rowDirection;
+            switch ($rowDirection) {
+                case '+':
+                    $lastLR = $firstLR + ($wordLength - 1);
+                    break;
+                case '-':
+                    $lastLR = $firstLR - ($wordLength - 1);
+                    break;
+                case '=':
+                    $lastLR = $firstLR;
+                    break;
+            }
+            //echo "<br>lastLR" . $lastLR;
+        } while ($lastLR > LENGTHBOARD || $lastLR < 0);
+
+        //Según la dirección de la columna, calculamos la posición de columna de la última letra
+        //Controlamos que no se salga del tablero generando números hasta que cuadre
+        //Cargamos también la $i++ del recorrido posterior para saber si tenemos que sumar 1, -1 o 0
+        // do {
+
+        //     //Verificamos que al menos una coordenada se desplaza
+        //     do {
+        //         $columnDirection = $direction[rand(0, 2)];
+        //     } while ($columnDirection == "=" && $rowDirection == "=");
+        //     //echo "<br>Direction  de la columna => " . $columnDirection;
+            
+        //     switch ($columnDirection) {
+        //         case '+':
+        //             $lastLC = $firstLC + ($wordLength - 1);
+        //             break;
+        //         case '-':
+        //             $lastLC = $firstLC - ($wordLength - 1);
+        //             break;
+        //         case '=':
+        //             $lastLC = $firstLC;
+        //             break;
+        //     }
+        //     //echo "<br>lastLC=>" . $lastLC;
+        // } while ($lastLC > LENGTHBOARD || $lastLC < 0);
 
         
-        //echo "<br>firstLC=>" . $firstLC;
-        //echo "<br>directionColumn=>" . $columnDirection;
-        //echo "<br>rowColumn=>" . $rowDirection;
-        switch ($columnDirection) {
-            case '+':
-                $lastLC = $firstLC + ($wordLength - 1);
-                $loopColumn = "1"; 
-                break;
-            case '-':
-                $lastLC = $firstLC - ($wordLength - 1);
-                $loopColumn = "-1"; 
-                break;
-            case '=':
-                $lastLC = $firstLC;
-                $loopColumn = "0"; 
-                break;
-        }
-        //echo "<br>lastLC=>" . $lastLC;
-    } while ($lastLC > LENGTHBOARD || $lastLC < 0);
+        
+        //var_dump($currentWord);
+    }
+
+
+
+
 
     //Recorremos array y comporbamos cada cuadrado
-    $wordLength = 6;
-   for ($index=0; $index < $wordLength; $index++) { 
-    
-    echo "<br>posicion=>" . $boardArray[$firstLR][$firstLC];
-    
-    if ($rowDirection == "+") {
-        $firstLR = $firstLR + 1;
-    } else if ($rowDirection == "-"){
-        $firstLR = $firstLR - 1;
-    }
+    // $wordLength = 6;
+    // for ($index = 0; $index < $wordLength; $index++) {
 
-    if ($columnDirection == "+") {
-        $firstLC = $firstLC + 1;
-    } else if ($columnDirection == "-"){
-        $firstLC = $firstLC - 1;
-    }
-    
-   }
+    //     echo "<br><br>posicion=>" . $boardArray[$firstLR][$firstLC];
 
-   
-
-    // for ($i = $firstLR; $i = $lastLR; $loopRow++) {
-    //     echo "<br>";
-    //     for ($j = $firstLC; $j = $lastLC; $loopColumn++) {
-    //         //echo $boardArray[$i][$j];
-    //         echo "<br>" . $i;
-    //         echo "<br>" . $j;
+    //     if (is_numeric($boardArray[$firstLR][$firstLC])) {
+    //         $boardArray[$firstLR][$firstLC] = "M";
+    //         echo ('<br>contenido=>' . $boardArray[$firstLR][$firstLC]);
     //     }
+
+    //     //Recorremos
+    //     if ($rowDirection == "+") {
+    //         $firstLR = $firstLR + 1;
+    //     } else if ($rowDirection == "-") {
+    //         $firstLR = $firstLR - 1;
+    //     }
+
+    //     if ($columnDirection == "+") {
+    //         $firstLC = $firstLC + 1;
+    //     } else if ($columnDirection == "-") {
+    //         $firstLC = $firstLC - 1;
+    //     }
+
+    //     echo "<br>posicion2=>" . $boardArray[$firstLR][$firstLC];
     // }
-
-
-
-    //Creamos el array de la última letra con sus coordenadas y le asignamos la letra 
-    $lastLetter[$lastLR][$lastLC] = "M"; //$currentWord[0];
-
 
     $validNumber = false;
 } while ($validNumber);
+
+for ($i = 0; $i <= LENGTHBOARD; $i++) {
+    echo "<br>";
+    for ($j = 0; $j <= LENGTHBOARD; $j++) {
+        echo $boardArray[$i][$j];
+    }
+}
 
 
 
