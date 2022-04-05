@@ -1,6 +1,6 @@
 <?php
-//Longiutd del tablero
-DEFINE("LENGTHBOARD", 10);
+//Longitud del tablero
+DEFINE("LENGTHBOARD", 9);
 //Array que contiene los datos de la tabla
 $boardArray = array();
 //Inicia que controla la búsqueda de casilla 
@@ -37,64 +37,71 @@ $wordLength = count($currentWord);
 
 //Array con 
 for ($i = 0; $i < LENGTHBOARD; $i++) {
-    echo "<br>";
+    //echo "<br>";
     for ($j = 0; $j < LENGTHBOARD; $j++) {
         $boardArray[$i][$j] = $text;
     }
 }
 
-//Mientras no haya númeor válido no lo coloca
-$validNumber = true;
-
+$validNumber = "true";
 do {
     //Creamos fila y columna inicial y dirección
     $firstLR = rand(0, 9);
-    $firstLC= rand(0, 9);
-    $rowDirection = $direction[rand(0,2)];
-    $columnDirection = $direction[rand(0,2)];
-    
+    $firstLC = rand(0, 9);
+
+
     //Contiene la primera letra con columna y fila
-    $firstLetter[$firstLR][$firstLC] = "M";//$currentWord[0];
-    
-    echo "<br>Primera línea=>" . $firstLR;
-    echo "<br>Primera columna=>" . $firstLC;
-    echo "<br>Dirección línea=>" . $rowDirection;
-    
-    //Según la dirección de la línea, calculamos la línea de la última letra
-    switch ($rowDirection) {
-        case '+':
-            $lastLR = $firstLR +($wordLength-1);
-            break;
-            case '-':
-                $lastLR = $firstLR - ($wordLength-1);
-                break;
-                case '=':
-                    $lastLR = $firstLR;
-                    break;
-    }
-    
-    echo "<br>Dirección columna=>" . $columnDirection;
-    switch ($columnDirection) {
-        case '+':
-            $lastLC = $firstLC +($wordLength-1);
-            break;
-            case '-':
-                $lastLC = $firstLC - ($wordLength-1);
-                break;
-                case '=':
-                    $lastLC = $firstLC;
-                    break;
-    }
-    echo "<br><br>Primera línea=>" . $firstLR;
-    echo "<br>Primera columna=>" . $firstLC;
-    echo "<br>Última línea=>" . $lastLR;
-    echo "<br>Última columna=>" . $lastLC;
+    $firstLetter[$firstLR][$firstLC] = "M"; //$currentWord[0];
 
-    $lastLetter[$lastLR][$lastLC] ="M";//$currentWord[0];
-    
+    // echo "<br>Primera línea=>" . $firstLR;
+    // echo "<br>Primera columna=>" . $firstLC;
+    //echo "<br>Dirección línea=>" . $rowDirection;
+
+    //Según la dirección de la línea, calculamos la posición de la línea de la última letra.
+    //Controlamos que no se salga del tablero generando números hasta que cuadre
+    do {
+        $rowDirection = $direction[rand(0, 2)];
+        //echo "<br>directionR" . $rowDirection;
+        switch ($rowDirection) {
+            case '+':
+                $lastLR = $firstLR + ($wordLength - 1);
+                break;
+            case '-':
+                $lastLR = $firstLR - ($wordLength - 1);
+                break;
+            case '=':
+                $lastLR = $firstLR;
+                break;
+        }
+        //echo "<br>lastLR" . $lastLR;
+    } while ($lastLR > LENGTHBOARD || $lastLR < 0);
+
+    //Según la dirección de la columna, calculamos la posición de columna de la última letra
+    //Controlamos que no se salga del tablero generando números hasta que cuadre
+    do {
+        $columnDirection = $direction[rand(0, 2)];
+        echo "<br>firstLC=>" . $firstLC;
+        echo "<br>directionColumn=>" . $columnDirection;
+        switch ($columnDirection) {
+            case '+':
+                $lastLC = $firstLC + ($wordLength - 1);
+                break;
+            case '-':
+                $lastLC = $firstLC - ($wordLength - 1);
+                break;
+            case '=':
+                $lastLC = $firstLC;
+                break;
+        }
+        echo "<br>lastLC=>" . $lastLC;
+    } while ($lastLC > LENGTHBOARD || $lastLC < 0);
+
+
+    //Creamos el array de la última letra con sus coordenadas y le asignamos la letra 
+    $lastLetter[$lastLR][$lastLC] = "M"; //$currentWord[0];
+
+
     $validNumber = false;
-    //Establecemos la posición final
-
 } while ($validNumber);
 
 
