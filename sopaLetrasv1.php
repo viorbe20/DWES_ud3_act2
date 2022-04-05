@@ -12,10 +12,10 @@ $direction = array("+", "-", "=");
 $rowDirection = "";
 $columnDirection = "";
 
-$n = 1;
+$sameLetter = false;
 
 //Array de palabras
-$wordsArray = array("MADRID", "LONDRES", "ROMA", "DUBLÍN", "PARÍS");
+$wordsArray = array("MADRID", "LONDRES");
 //Array que rellenaremos con los datos de cada palabra una vez colocadas y que usaremos para una comprobación final
 $capitalsArray = array();
 //array_push($capitalsArray, array("Nombre"=>"MADRID"));
@@ -33,17 +33,20 @@ $firstLR = "";
 $firstLC = "";
 $lastLR = "";
 $lastLC = "";
+$row = "";
+$column = "";
+
+//Indica cuando se ha colocado una palabra y poder pasar a la siguiente
+$wordSet = false;
 
 //Array con 
 for ($i = 0; $i <= LENGTHBOARD; $i++) {
-    echo "<br>";
+    echo "<br><br>";
     for ($j = 0; $j <= LENGTHBOARD; $j++) {
         $text = $i . $j . " ";
-        echo $boardArray[$i][$j] = $text;
+        echo "<span class='square1'>" . $boardArray[$i][$j] = $text . "</span>";
     }
 }
-
-$boardArray[0][0] = "*";
 
 $validNumber = "true";
 do {
@@ -51,24 +54,21 @@ do {
     //Seleccionamos una capital y colocamos en la sopa. 
     //Repetimos el mismo proceso con todas hasta que están todas colocadas.
     foreach ($wordsArray as $key) {
-        echo ('<br><br>Capital seleccionada=> ' . $key);
 
         //Creamos fila y columna inicial para la primera letra de palabra actual
         $firstLR = rand(0, 9);
         $firstLC = rand(0, 9);
-        echo '<br>' . $key . " inicia en " . $firstLR . $firstLC;
 
         //Cargamos en una variable la longitud de la palabra
         //Extrae la palabra del array y la separa en letras dentro de un array
         $currentWord = str_split($key);
         $wordLength = count($currentWord);
-        echo '<br>Longitud de ' . $key . " => " . $wordLength;
 
         //Según la dirección de la línea, calculamos la posición de la línea de la última letra.
         //Controlamos que no se salga del tablero generando números hasta que cuadre
         do {
             $rowDirection = $direction[rand(0, 2)];
-            echo "<br>Dirección  de la fila => " . $rowDirection;
+            //echo "<br>Dirección  de la fila => " . $rowDirection;
             switch ($rowDirection) {
                 case '+':
                     $lastLR = $firstLR + ($wordLength - 1);
@@ -90,8 +90,8 @@ do {
             do {
                 $columnDirection = $direction[rand(0, 2)];
             } while ($columnDirection == "=" && $rowDirection == "=");
-            echo "<br>Direction  de la columna => " . $columnDirection;
-            
+            //echo "<br>Direction  de la columna => " . $columnDirection;
+
             switch ($columnDirection) {
                 case '+':
                     $lastLC = $firstLC + ($wordLength - 1);
@@ -105,56 +105,107 @@ do {
             }
         } while ($lastLC > LENGTHBOARD || $lastLC < 0);
 
+        echo ('<br><br>Capital seleccionada=> ' . $key);
+        echo '<br>' . $key . " inicia en " . $firstLR . $firstLC;
+        echo '<br>' . $key . " termina en " . $lastLR . $lastLC;
+        echo '<br>Longitud de ' . $key . " => " . $wordLength;
 
         //Cargamos datos de capital y coordenadas en el array de verificación
-        $capitalsArray = array("Nombre" => $key, "Empieza" => $firstLR.$firstLC, "Acaba" => $lastLR.$lastLC);
-                foreach ($capitalsArray as $key => $value) {
-                    echo('<br>'. $key . ": " .$value) ;
+        $capitalsArray = array("Nombre" => $key, "Empieza" => $firstLR . $firstLC, "Acaba" => $lastLR . $lastLC);
+        //Comprobación colocación array
+        // foreach ($capitalsArray as $key => $value) {
+        //     echo ('<br>' . $key . ": " . $value);
+        // }
+
+        //Recorremos array inicial y leemos lo que hay en cada casilla
+        //Lo hacemos hasta que consigamos confirmar el sitio la palabra
+        do {
+            $row = $firstLR;
+            $column = $firstLC;
+
+            for ($index = 0; $index < $wordLength; $index++) {
+                //echo ('<br><br>Contenido de posición ' . $firstLR . $firstLC . " => " . $boardArray[$firstLR][$firstLC]);
+
+                //Recorremos la palabra para ir comprobando cada letra
+                foreach ($currentWord as $value => $letter) {
+                    //echo ('<br>Letra actual => ' . $letter);
+
+                    //Si hay letra, comprobamos si es la misma
+                    if ($boardArray[$row][$column] == $letter) {
+                        echo ('<br>Misma letra' . $letter);
+                        $sameLetter = true;
+                    }
+
+                    echo ('<br><br>Contenido => ' . $boardArray[$row][$column]);
+                    //Si el contenido de la sopa es numérico, o la letra es la misma, colocamos letra
+                    if (!is_int($boardArray[$row][$column])) {
+                        echo ('<br>Contiene numérico => ' . $boardArray[$row][$column]);
+                        //Sobreescribimos
+                        $boardArray[$row][$column] =  $letter . "-";
+                        echo ('<br>Nuevo contenido => ' . $boardArray[$row][$column]);
+
+                        //Seguimos recorriendo la palabra hasta el final y haciendo las mismas comprobaciones
+                        if ($rowDirection == "+") {
+                            $row = $row + 1;
+                        } else if ($rowDirection == "-") {
+                            $row = $row - 1;
+                        }
+
+                        if ($columnDirection == "+") {
+                            $column = $column + 1;
+                        } else if ($columnDirection == "-") {
+                            $column = $column - 1;
+                        }
+                    } else {
+                        echo ('<br>Nooooooo contiene numérico => ' . $boardArray[$row][$column]);
+                    }
+
+
+
+                    // if ($sameLetter) {
+                    //     echo ('<br>Misma letra => ' . $boardArray[$row][$column] . " y " . $letter);
+                    //     $sameLetter = false;
+                    // }
+                    // if (is_numeric($boardArray[$row][$column] || $sameLetter)) {
+                    //     //Volvemos a cambiar la bandera para la próxima vuelta
+                    //     $sameLetter = false;
+                    //     
+                    //     echo ('<br><br>Contenido de posición cambiado ' . $row . $column . " => " . $boardArray[$row][$column]);
+
+
+                    // } else {
+                    //     $wordSet = false;
+                    // }
                 }
-    }//foreach capitales
+
+                //En la última lectura del for hacemos que se salga
+                if ($index = ($wordLength - 1)) {
+                    $wordSet = true;
+                }
+            }
+        } while (!$wordSet);
 
 
 
+        //Cambiamos para que empiece con false en la siguiente capital
+        $wordSet = false;
 
-
-    //Recorremos array y comporbamos cada cuadrado
-    // $wordLength = 6;
-    // for ($index = 0; $index < $wordLength; $index++) {
-
-    //     echo "<br><br>posicion=>" . $boardArray[$firstLR][$firstLC];
-
-    //     if (is_numeric($boardArray[$firstLR][$firstLC])) {
-    //         $boardArray[$firstLR][$firstLC] = "M";
-    //         echo ('<br>contenido=>' . $boardArray[$firstLR][$firstLC]);
-    //     }
-
-    //     //Recorremos
-    //     if ($rowDirection == "+") {
-    //         $firstLR = $firstLR + 1;
-    //     } else if ($rowDirection == "-") {
-    //         $firstLR = $firstLR - 1;
-    //     }
-
-    //     if ($columnDirection == "+") {
-    //         $firstLC = $firstLC + 1;
-    //     } else if ($columnDirection == "-") {
-    //         $firstLC = $firstLC - 1;
-    //     }
-
-    //     echo "<br>posicion2=>" . $boardArray[$firstLR][$firstLC];
-    // }
+        //Aquí ya hemos comprobado que la palabra tiene un espacio
+        //echo ('<br>' . $key . " colocada.");
+    } //foreach capitales
 
     $validNumber = false;
 } while ($validNumber);
 
+//Imprimimos array relleno
+echo ('<br><br>');
 for ($i = 0; $i <= LENGTHBOARD; $i++) {
     echo "<br>";
     for ($j = 0; $j <= LENGTHBOARD; $j++) {
-        echo $boardArray[$i][$j];
+
+        echo "<strong>" . $boardArray[$i][$j] . "</strong>";
     }
 }
-
-
 
 ?>
 
@@ -164,30 +215,24 @@ for ($i = 0; $i <= LENGTHBOARD; $i++) {
 
 <head>
     <style>
-        .square {
-            background-color: lightslategray;
-            width: 40px;
-            height: 40px;
-            font-size: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .square1 {
+            background-color: paleturquoise;
+            width: 30px;
+            height: 30px;
+            *justify-content: center;
+            *align-items: center;
+            margin-top: 15px;
+            padding: 5px;
+
+        }
+
+        .letter {
+            color: blue;
         }
     </style>
 </head>
 
 <body>
-
-    <!-- //Tablero interno
-// echo "<table>";
-// for ($i = 0; $i < LENGTHBOARD; $i++) {
-//     echo "<tr>";
-//     for ($j = 0; $j < LENGTHBOARD; $j++) {
-//         echo "<td> <div class='square' value=$text name='square$i$j'[]>$text</div> </td>";
-//     }
-//     echo "</tr>";
-// }
-// echo "</table>";  -->
 
 </body>
 
