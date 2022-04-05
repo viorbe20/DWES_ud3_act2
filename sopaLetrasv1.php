@@ -24,18 +24,16 @@ $firstLetter = array();
 $lastLetter = array();
 
 //Contiene coordenadas de primera y última letra
-$firstLetterRow = "";
-$firstLetterColumn = "";
-$lastLetterRow = "";
-$lastLetterColumn = "";
+$firstLR = "";
+$firstLC = "";
+$lastLR = "";
+$lastLC = "";
 
 //Extrae la palabra del array y la separa en letras dentro de un array
 $word = $wordsArray[0];
 $currentWord = str_split($word);
 $wordLength = count($currentWord);
 //var_dump($currentWord);
-
-
 
 //Array con 
 for ($i = 0; $i < LENGTHBOARD; $i++) {
@@ -50,59 +48,56 @@ $validNumber = true;
 
 do {
     //Creamos fila y columna inicial y dirección
-    $firstLetterRow = rand(0, 9);
-    $firstLetterColumn= rand(0, 9);
+    $firstLR = rand(0, 9);
+    $firstLC= rand(0, 9);
     $rowDirection = $direction[rand(0,2)];
     $columnDirection = $direction[rand(0,2)];
     
     //Contiene la primera letra con columna y fila
-    $firstLetter[$firstLetterRow][$firstLetterColumn] = "M";//$currentWord[0];
-    echo "<br>Primera línea=>" . $firstLetterRow;
-    echo "<br>Primera columna=>" . $firstLetterColumn;
+    $firstLetter[$firstLR][$firstLC] = "M";//$currentWord[0];
+    
+    echo "<br>Primera línea=>" . $firstLR;
+    echo "<br>Primera columna=>" . $firstLC;
     echo "<br>Dirección línea=>" . $rowDirection;
+    
     //Según la dirección de la línea, calculamos la línea de la última letra
     switch ($rowDirection) {
         case '+':
-            $lastLetterRow = $firstLetterRow +($wordLength-1);
+            $lastLR = $firstLR +($wordLength-1);
             break;
             case '-':
-                $lastLetterRow = $firstLetterRow - ($wordLength-1);
+                $lastLR = $firstLR - ($wordLength-1);
                 break;
                 case '=':
-                    $lastLetterRow = $firstLetterRow;
+                    $lastLR = $firstLR;
                     break;
     }
     
     echo "<br>Dirección columna=>" . $columnDirection;
-    switch ($lastLetterColumn) {
+    switch ($columnDirection) {
         case '+':
-            $lastLetterColumn = $firstLetterColumn +($wordLength-1);
+            $lastLC = $firstLC +($wordLength-1);
             break;
             case '-':
-                $lastLetterColumn = $firstLetterColumn - ($wordLength-1);
+                $lastLC = $firstLC - ($wordLength-1);
                 break;
                 case '=':
-                    $lastLetterColumn = $firstLetterColumn;
+                    $lastLC = $firstLC;
                     break;
     }
-    echo "<br>Primera línea=>" . $firstLetterRow;
-    echo "<br>Primera columna=>" . $firstLetterColumn;
-    echo "<br>Última línea=>" . $lastLetterRow;
-    echo "<br>Última columna=>" . $lastLetterColumn;
+    echo "<br><br>Primera línea=>" . $firstLR;
+    echo "<br>Primera columna=>" . $firstLC;
+    echo "<br>Última línea=>" . $lastLR;
+    echo "<br>Última columna=>" . $lastLC;
 
-    $lastLetter[$lastLetterRow][$lastLetterColumn] ="M";//$currentWord[0];
+    $lastLetter[$lastLR][$lastLC] ="M";//$currentWord[0];
     
     $validNumber = false;
     //Establecemos la posición final
 
 } while ($validNumber);
 
-echo "<br>";
-echo "Madrid";
-echo "<br>";
-var_dump($firstLetter);
-echo "<br>";
-var_dump($lastLetter);
+
 
 ?>
 
