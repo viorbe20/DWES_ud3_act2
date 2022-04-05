@@ -53,9 +53,6 @@ do {
     foreach ($wordsArray as $key) {
         echo ('<br><br>Capital seleccionada=> ' . $key);
 
-        //Colocamos el nombre de la capital en el array final de verificación
-        array_push($capitalsArray, array("Nombre" => $key));
-
         //Creamos fila y columna inicial para la primera letra de palabra actual
         $firstLR = rand(0, 9);
         $firstLC = rand(0, 9);
@@ -69,11 +66,9 @@ do {
 
         //Según la dirección de la línea, calculamos la posición de la línea de la última letra.
         //Controlamos que no se salga del tablero generando números hasta que cuadre
-        //Cargamos también la $i++ del recorrido posterior para saber si tenemos que sumar 1, -1 o 0
-
         do {
             $rowDirection = $direction[rand(0, 2)];
-            echo "<br>Direction  de la fila => " . $rowDirection;
+            echo "<br>Dirección  de la fila => " . $rowDirection;
             switch ($rowDirection) {
                 case '+':
                     $lastLR = $firstLR + ($wordLength - 1);
@@ -85,38 +80,38 @@ do {
                     $lastLR = $firstLR;
                     break;
             }
-            //echo "<br>lastLR" . $lastLR;
         } while ($lastLR > LENGTHBOARD || $lastLR < 0);
 
         //Según la dirección de la columna, calculamos la posición de columna de la última letra
         //Controlamos que no se salga del tablero generando números hasta que cuadre
-        //Cargamos también la $i++ del recorrido posterior para saber si tenemos que sumar 1, -1 o 0
-        // do {
+        do {
 
-        //     //Verificamos que al menos una coordenada se desplaza
-        //     do {
-        //         $columnDirection = $direction[rand(0, 2)];
-        //     } while ($columnDirection == "=" && $rowDirection == "=");
-        //     //echo "<br>Direction  de la columna => " . $columnDirection;
+            //Verificamos que al menos una coordenada se desplaza. Las dos no pueden ser =
+            do {
+                $columnDirection = $direction[rand(0, 2)];
+            } while ($columnDirection == "=" && $rowDirection == "=");
+            echo "<br>Direction  de la columna => " . $columnDirection;
             
-        //     switch ($columnDirection) {
-        //         case '+':
-        //             $lastLC = $firstLC + ($wordLength - 1);
-        //             break;
-        //         case '-':
-        //             $lastLC = $firstLC - ($wordLength - 1);
-        //             break;
-        //         case '=':
-        //             $lastLC = $firstLC;
-        //             break;
-        //     }
-        //     //echo "<br>lastLC=>" . $lastLC;
-        // } while ($lastLC > LENGTHBOARD || $lastLC < 0);
+            switch ($columnDirection) {
+                case '+':
+                    $lastLC = $firstLC + ($wordLength - 1);
+                    break;
+                case '-':
+                    $lastLC = $firstLC - ($wordLength - 1);
+                    break;
+                case '=':
+                    $lastLC = $firstLC;
+                    break;
+            }
+        } while ($lastLC > LENGTHBOARD || $lastLC < 0);
 
-        
-        
-        //var_dump($currentWord);
-    }
+
+        //Cargamos datos de capital y coordenadas en el array de verificación
+        $capitalsArray = array("Nombre" => $key, "Empieza" => $firstLR.$firstLC, "Acaba" => $lastLR.$lastLC);
+                foreach ($capitalsArray as $key => $value) {
+                    echo('<br>'. $key . ": " .$value) ;
+                }
+    }//foreach capitales
 
 
 
