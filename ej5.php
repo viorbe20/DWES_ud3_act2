@@ -10,7 +10,7 @@ $columnDirection = "";
 $sameLetter = false;
 
 //Array de palabras
-$capitalsArray = array("MADRID", "LONDRES", "PARIS");
+$capitalsArray = array("MADRID", "LONDRES", "PARIS", "BERLIN", "ROMA");
 $alphabet = array("a", "b", "c", "d", "e", "f");
 $capitalsArrayLenght = count($capitalsArray);
 //Array que rellenaremos con los datos de cada palabra una vez colocadas y que usaremos para una comprobación final
@@ -33,9 +33,8 @@ $wordSet = false;
 $letterChecked = "";
 $wordChecked = "";
 
-//Array inicial
+//Array inicial que cargamos con valor 0
 for ($i = 0; $i <= LENGTHBOARD; $i++) {
-    //echo "<br><br>";
     for ($j = 0; $j <= LENGTHBOARD; $j++) {
         $boardArray[$i][$j] = "0";
     }
@@ -177,36 +176,50 @@ foreach ($capitalsArray as $key => $capitalName) {
 
 <head>
     <style>
-        .square1 {
-            background-color: paleturquoise;
+        #container{
+            background-color: palegoldenrod;
+            width: 300px;
+            padding: 10px;
+        }
+        .square {
             width: 30px;
             height: 30px;
-            *justify-content: center;
-            *align-items: center;
-            margin-top: 15px;
-            padding: 5px;
-
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .letter {
+        #upper {
             color: blue;
         }
+
+        .row{
+            display: flex;
+        }
+
+      
     </style>
 </head>
 
 <body>
-<?php
-for ($i = 0; $i <= LENGTHBOARD; $i++) {
-    echo "<br><br>";
-    for ($j = 0; $j <= LENGTHBOARD; $j++) {
-        if ($boardArray[$i][$j] != 0) {
-            echo "<span style='color:red'>" . $boardArray[$i][$j] . "</span>";
-        } else {
-            echo $boardArray[$i][$j] = $alphabet[rand(0, 5)];
+<div id='container'>
+    <?php
+    for ($i = 0; $i <= LENGTHBOARD; $i++) {
+        //echo "<br><br>";
+        echo "<div class='row'>";
+        for ($j = 0; $j <= LENGTHBOARD; $j++) {
+            if ($boardArray[$i][$j] != 0) {
+                echo "<div id='upper' class='square'>" . $boardArray[$i][$j] . "</div>";
+            } else {
+                echo "<div id='low' class='square'>" . $boardArray[$i][$j] = $alphabet[rand(0, 5)] . "</div>";
+            }
         }
+        echo "</div>";
     }
-}
-?>
+
+    ?>
+</div>
 </body>
 
 </html>
