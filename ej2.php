@@ -3,7 +3,6 @@ Diseña y almacena en un array una lista de países junto con sus capitales.
 Muestra un formulario que permita al usuario introducir las capitales de los países presentados. 
 En respuesta al formulario, la aplicación mostrará el número de aciertos y fallos. 
 Incluye una opción que permita visualizar las opciones correctas. 
-Muestra una sopa de letras con 5 de las capitales almacenadas.
 Virginia Ordoño Bernier
 -->
 
